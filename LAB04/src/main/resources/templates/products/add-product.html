@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Thêm Sản Phẩm Mới</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card p-4">
+                    <h4 class="fw-bold mb-3 text-center">Thêm Sản Phẩm Mới</h4>
+                    
+                    <form th:action="@{/products/add}" th:object="${product}" method="post">
+                        <!-- Tên sản phẩm -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold">Tên sản phẩm <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Nhập tên sản phẩm..." required>
+                        </div>
+
+                        <!-- Giá sản phẩm -->
+                        <div class="mb-3">
+                            <label for="price" class="form-label fw-semibold">Giá bán (VNĐ) <span class="text-danger">*</span></label>
+                            <input type="number" step="1000" th:field="*{price}" id="price" class="form-control" placeholder="Ví dụ: 15000000" required>
+                        </div>
+
+                        <!-- Danh mục sản phẩm (Có tích hợp nút tạo danh mục riêng) -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label fw-semibold">Danh mục <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select th:field="*{category}" id="category" class="form-select" required>
+                                    <option value="">-- Chọn danh mục --</option>
+                                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                                </select>
+                                <a th:href="@{/categories/add}" class="btn btn-outline-secondary" target="_blank" title="Tạo mới danh mục trong tab khác">
+                                    <i class="bi bi-plus-lg"></i> Tạo mới
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Mô tả -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold">Mô tả sản phẩm</label>
+                            <textarea th:field="*{description}" id="description" class="form-control" rows="3" placeholder="Nhập mô tả ngắn về sản phẩm..."></textarea>
+                        </div>
+
+                        <!-- Nút bấm -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/products}" class="btn btn-light px-4">Hủy</a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-check-lg me-1"></i> Lưu Sản Phẩm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

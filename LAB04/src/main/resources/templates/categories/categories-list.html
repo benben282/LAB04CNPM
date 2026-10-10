@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Danh Sách Danh Mục</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        
+        <!-- Header trang -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1">Danh Mục Sản Phẩm</h3>
+                <p class="text-muted small mb-0">Quản lý các nhóm danh mục dùng cho phân loại sản phẩm</p>
+            </div>
+            <a th:href="@{/categories/add}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Thêm Danh Mục Mới
+            </a>
+        </div>
+
+        <!-- Bảng danh sách -->
+        <div class="card p-3">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 10%;">ID</th>
+                            <th style="width: 65%;">Tên Danh Mục</th>
+                            <th style="width: 25%;" class="text-end">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cat : ${categories}">
+                            <td class="fw-bold text-secondary" th:text="'#' + ${cat.id}">#1</td>
+                            <td>
+                                <span class="badge badge-category px-3 py-2 fs-6" th:text="${cat.name}">Tên danh mục</span>
+                            </td>
+                            <td class="text-end">
+                                <a th:href="@{/categories/edit/{id}(id=${cat.id})}" class="btn btn-sm btn-outline-warning me-1" title="Chỉnh sửa">
+                                    <i class="bi bi-pencil-square"></i> Sửa
+                                </a>
+                                <a th:href="@{/categories/delete/{id}(id=${cat.id})}" class="btn btn-sm btn-outline-danger" 
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')" title="Xóa">
+                                    <i class="bi bi-trash"></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Trường hợp chưa có dữ liệu -->
+                        <tr th:if="${#lists.isEmpty(categories)}">
+                            <td colspan="3" class="text-center py-4 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                Chưa có danh mục nào. Hãy bấm <b>Thêm Danh Mục Mới</b> để tạo!
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

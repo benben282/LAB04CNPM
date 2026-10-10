@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bán hàng trực tuyến</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <!-- Tiêu đề trang -->
+        <h1 class="text-center fw-bold mb-4">Bán hàng trực tuyến</h1>
+
+        <!-- THANH DANH MỤC NẰM NGOÀI -->
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-4 flex-wrap">
+            <!-- Nút "Tất cả" -->
+            <a th:href="@{/}" 
+               class="btn px-4 py-2"
+               th:classappend="${selectedCategoryId == null} ? 'btn-dark' : 'btn-outline-dark'">
+               Tất cả
+            </a>
+
+            <!-- Vòng lặp hiển thị từng Danh Mục lấy từ CSDL -->
+            <a th:each="cat : ${categories}"
+               th:href="@{/(categoryId=${cat.id})}"
+               class="btn px-4 py-2"
+               th:classappend="${selectedCategoryId == cat.id} ? 'btn-dark' : 'btn-outline-dark'"
+               th:text="${cat.name}">
+               Điện thoại di động
+            </a>
+
+            <!-- Các nút quản lý danh mục nhanh -->
+            <a th:href="@{/categories/add}" class="btn btn-success ms-2" title="Thêm danh mục mới">
+                <i class="bi bi-plus-circle"></i> + Tạo Danh Mục
+            </a>
+            <a th:href="@{/categories}" class="btn btn-outline-secondary" title="Trang quản lý danh mục">
+                <i class="bi bi-gear"></i> Quản Lý Danh Mục
+            </a>
+        </div>
+
+        <hr class="mb-5">
+
+        <!-- HIỂN THỊ DẢI SẢN PHẨM NGAY BÊN DƯỚI DANH MỤC -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold m-0">Sản Phẩm Hiển Thị</h4>
+            <a th:href="@{/products/add}" class="btn btn-primary">
+                + Thêm Sản Phẩm Mới
+            </a>
+        </div>
+
+        <!-- Bảng/Lưới Danh sách Sản Phẩm -->
+        <div class="row row-cols-1 row-cols-md-3 g-4" th:if="${!#lists.isEmpty(products)}">
+            <div class="col" th:each="p : ${products}">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2" 
+                              th:text="${p.category != null ? p.category.name : 'Chưa phân loại'}">
+                        </span>
+                        <h5 class="card-title fw-bold" th:text="${p.name}">Tên sản phẩm</h5>
+                        <p class="card-text text-danger fw-bold fs-5" 
+                           th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">
+                           0 VNĐ
+                        </p>
+                        <p class="card-text text-muted small" th:text="${p.description}">Mô tả sản phẩm...</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between pb-3">
+                        <a th:href="@{/products/edit/{id}(id=${p.id})}" class="btn btn-sm btn-outline-warning">
+                            <i class="bi bi-pencil"></i> Sửa
+                        </a>
+                        <a th:href="@{/products/delete/{id}(id=${p.id})}" class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
+                            <i class="bi bi-trash"></i> Xóa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trạng thái khi chưa có sản phẩm -->
+        <div class="text-center py-5 text-muted" th:if="${#lists.isEmpty(products)}">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Không có sản phẩm nào thuộc danh mục này.
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
